@@ -1,0 +1,32 @@
+# Maintainer: Valgi Virnan Vallian
+
+pkgname=manokwari-git
+pkgver=1.0.3
+pkgrel=1
+pkgdesc="BlankOn desktop flagship"
+arch=('i686' 'x86_64')
+url=""
+license=('GPLv2')
+depends=('gtk3' 'upower' 'libwnck3' 'gnome-menus' 'gnome-settings-daemon' 'libpeas' 'mutter' 'desktop-file-utils' 'libpulse' 'vala' 'libgee' 'gnome-themes-standard' 'gnome-control-center' 'gnome-session' 'gtk-doc')
+makedepends=('libgee06' 'libunique3' 'webkitgtk' 'gnome-common' 'autoconf' 'git' 'python2' 'gobject-introspection' 'intltool')
+provides=('manokwari')
+install=manokwari.install
+source=("$pkgname"::'git+https://github.com/BlankOn/manokwari.git#branch=master')
+noextract=()
+md5sums=('SKIP')
+
+pkgver() {
+	cd "$srcdir/$pkgname"
+	git describe --tag | sed -r 's/([^-]*-g)/r\1/;s/-/./g'
+}
+
+build() {
+	cd "$srcdir/$pkgname"
+        ./autogen.sh --prefix=/usr
+	make
+}
+
+package() {
+	cd "$srcdir/$pkgname"
+	make DESTDIR="$pkgdir/" install
+}
